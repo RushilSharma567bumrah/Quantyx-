@@ -1,0 +1,1 @@
+sales_revenue = [[chair_type, price * quantity] for chair_type in products_on_sale for price in sale_prices for quantity in quantities if None not in [chair_type, price, quantity]]

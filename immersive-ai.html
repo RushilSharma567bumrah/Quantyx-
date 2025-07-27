@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-moonlight">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantyx AI | Ultimate Performance</title>
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23000000;stop-opacity:1' /><stop offset='100%' style='stop-color:%2300cc66;stop-opacity:1' /></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23grad)' /><circle cx='16' cy='16' r='8' fill='none' stroke='%23ffffff' stroke-width='2' /><path d='M12 16 L16 12 L20 16 L16 20 Z' fill='%23ffffff' /></svg>" type="image/svg+xml">
+  <link rel="stylesheet" href="final.css">
+  <style>
+    /* Base Variables */
+    :root {
+      --moon-white: #f7fafc;
+      --moon-silver: #cbd5e0;
+      --moon-blue: #4f83cc;
+      --moon-dark-blue: #2c5282;
+      --moon-midnight: #1a202c;
+      --moon-black: #171923;
+      --moon-purple: #805ad5;
+      --moon-gold: #d69e2e;
+      --moon-crescent: #e2e8f0;
+      --gradient-primary: linear-gradient(135deg, var(--moon-blue) 0%, var(--moon-purple) 100%);
+      --glow: 0 0 15px rgba(79, 131, 204, 0.7);
+      --text-primary: #ffffff;
+      
+      /* Animation Timing */
+      --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      --transition-delayed: cubic-bezier(0, 0, 0.2, 1);
+    }
+    
+    /* Base Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', 'Segoe UI', sans-serif;
+      background-color: var(--moon-midnight);
+      color: var(--moon-white);
+      min-height: 100vh;
+      overflow-x: hidden;
+      perspective: 1000px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" /><path d="M0 50 L50 0 L100 50 L50 100 Z" stroke="%232c5282" stroke-width="1" fill="none" opacity="0.2" /><circle cx="50" cy="50" r="30" stroke="%234f83cc" stroke-width="1" fill="none" opacity="0.1" /></svg>');
+      background-size: 100px 100px;
+    }
+    
+    main {
+      transform-style: preserve-3d;
+    }
+    
+    /* Splash Screen */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--moon-black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 1s var(--transition-smooth), visibility 1s var(--transition-smooth);
+    }
+    
+    .splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      display: none !important;
+    }
+    
+    .splash-logo {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 20px var(--moon-blue));
+      animation: pulse 2s infinite;
+    }
+    
+    .splash-title {
+      font-size: clamp(2rem, 5vw, 4rem);
+      margin-bottom: 20px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .splash-title.visible {
+      animation: fadeInUp 1s forwards;
+    }
+    
+    .splash-subtitle {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--moon-silver);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .splash-subtitle.visible {
+      animation: fadeInUp 1s forwards 0.5s;
+    }
+    
+    .splash-progress {
+      width: 300px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 40px;
+      position: relative;
+    }
+    
+    .splash-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--gradient-primary);
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: width 0.5s var(--transition-smooth);
+    }
+    
+    /* 3D Avatar Container */
+    .avatar-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin-bottom: 40px;
+    }
+    
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: rgba(26, 32, 44, 0.8);
+      backdrop-filter: blur(10px);
+      transition: transform 0.5s var(--transition-smooth);
+    }
+    
+    header.hidden {
+      transform: translateY(-100%);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      filter: drop-shadow(0 0 10px var(--moon-blue));
+    }
+    
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+    
+    nav a {
+      color: var(--moon-silver);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s var(--transition-smooth);
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--moon-crescent);
+      transition: width 0.3s var(--transition-smooth);
+    }
+    
+    nav a:hover {
+      color: var(--moon-white);
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    /* Main Content */
+    main {
+      padding-top: 100px;
+    }
+    
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="none" /><circle cx="500" cy="500" r="300" stroke="%234f83cc" stroke-width="2" fill="none" opacity="0.2" /><circle cx="500" cy="500" r="200" stroke="%23805ad5" stroke-width="2" fill="none" opacity="0.2" /><circle cx="500" cy="500" r="100" stroke="%23d69e2e" stroke-width="2" fill="none" opacity="0.1" /><path d="M300 500 L500 300 L700 500 L500 700 Z" stroke="%234f83cc" stroke-width="2" fill="none" opacity="0.1" /><path d="M400 500 L500 400 L600 500 L500 600 Z" stroke="%23805ad5" stroke-width="2" fill="none" opacity="0.2" /></svg>');
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+      text-align: center;
+      padding: 0 20px;
+      z-index: 2;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    
+    .hero-title {
+      transform: translateZ(50px);
+    }
+    
+    .hero-subtitle {
+      transform: translateZ(30px);
+    }
+    
+    .hero-cta {
+      transform: translateZ(70px);
+    }
+    
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      margin-bottom: 20px;
+      line-height: 1.1;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 20px rgba(79, 131, 204, 0.3);
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--moon-silver);
+      margin-bottom: 40px;
+    }
+    
+    .hero-cta {
+      display: inline-block;
+      padding: 15px 40px;
+      background: var(--gradient-primary);
+      color: var(--moon-white);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s var(--transition-bounce);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--glow);
+    }
+    
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.7s var(--transition-smooth);
+    }
+    
+    .hero-cta:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(79, 131, 204, 0.5);
+    }
+    
+    .hero-cta:hover::before {
+      left: 100%;
+    }
+    
+    /* Prompt Section */
+    .prompt-section {
+      padding: 100px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .prompt-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 20px;
+    }
+    
+    .prompt-subtitle {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--moon-silver);
+      margin-bottom: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .prompt-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(45, 55, 72, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(79, 131, 204, 0.3);
+    }
+    
+    .prompt-input {
+      flex: 1;
+      background: rgba(26, 32, 44, 0.5);
+      border: 1px solid rgba(79, 131, 204, 0.3);
+      border-radius: 5px;
+      padding: 15px;
+      color: var(--moon-white);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
+    .prompt-input:focus {
+      outline: none;
+      border-color: var(--moon-blue);
+      box-shadow: 0 0 0 2px rgba(79, 131, 204, 0.2);
+    }
+    
+    .prompt-button {
+      background: var(--gradient-primary);
+      color: var(--moon-white);
+      border: none;
+      border-radius: 5px;
+      padding: 0 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s var(--transition-bounce);
+    }
+    
+    .prompt-button:hover {
+      transform: scale(1.05);
+      box-shadow: var(--glow);
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 100px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .features::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(to right, rgba(79, 131, 204, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(79, 131, 204, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+    }
+    
+    .features-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .features-subtitle {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--moon-silver);
+      margin-bottom: 60px;
+      text-align: center;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature-card {
+      background: rgba(45, 55, 72, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 30px;
+      transition: transform 0.3s var(--transition-bounce), box-shadow 0.3s var(--transition-smooth);
+      border: 1px solid rgba(79, 131, 204, 0.1);
+      height: 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(79, 131, 204, 0.3);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+    
+    .feature-description {
+      color: var(--moon-silver);
+      line-height: 1.6;
+    }
+    
+    /* Comparison Section */
+    .comparison {
+      padding: 100px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .comparison-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 20px;
+    }
+    
+    .comparison-subtitle {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--moon-silver);
+      margin-bottom: 60px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background: rgba(45, 55, 72, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(79, 131, 204, 0.2);
+    }
+    
+    .comparison-table th {
+      background: rgba(26, 32, 44, 0.8);
+      color: var(--moon-white);
+      font-weight: 600;
+    }
+    
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .comparison-table td:first-child {
+      font-weight: 600;
+    }
+    
+    .comparison-check {
+      color: #48bb78;
+      font-size: 1.2rem;
+    }
+    
+    .comparison-x {
+      color: #f56565;
+      font-size: 1.2rem;
+    }
+    
+    /* Chat Interface */
+    .chat-interface {
+      max-width: 1200px;
+      margin: 100px auto;
+      padding: 0 20px;
+    }
+    
+    .chat-container {
+      background: rgba(45, 55, 72, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(79, 131, 204, 0.3);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s var(--transition-smooth);
+    }
+    
+    .chat-interface:hover .chat-container {
+      transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateZ(20px);
+    }
+    
+    .chat-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+    }
+    
+    .chat-header {
+      padding: 20px;
+      background: rgba(26, 32, 44, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .chat-icon {
+      width: 30px;
+      height: 30px;
+      filter: drop-shadow(0 0 10px var(--moon-blue));
+    }
+    
+    .chat-name {
+      font-size: 1.2rem;
+      color: var(--moon-crescent);
+    }
+    
+    .chat-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--moon-silver);
+      font-size: 0.9rem;
+    }
+    
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      background-color: var(--moon-blue);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    .chat-messages {
+      height: 500px;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .message {
+      max-width: 80%;
+      padding: 15px 20px;
+      border-radius: 10px;
+      position: relative;
+      animation: fadeIn 0.5s forwards;
+      transform-style: preserve-3d;
+      transition: transform 0.3s var(--transition-bounce);
+    }
+    
+    .message:hover {
+      transform: translateZ(10px) scale(1.02);
+    }
+    
+    .message-user {
+      align-self: flex-end;
+      background: var(--surface-variant);
+      border-bottom-right-radius: 0;
+      color: var(--moon-white);
+    }
+    
+    .message-ai {
+      align-self: flex-start;
+      background: var(--gradient-primary);
+      border-bottom-left-radius: 0;
+      color: var(--moon-white);
+      box-shadow: var(--glow);
+    }
+    
+    .message-time {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 5px;
+      text-align: right;
+    }
+    
+    .chat-input-container {
+      padding: 20px;
+      display: flex;
+      gap: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(26, 32, 44, 0.9);
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 15px 20px;
+      background: rgba(74, 85, 104, 0.5);
+      border: 1px solid rgba(79, 131, 204, 0.3);
+      border-radius: 5px;
+      color: var(--moon-white);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--moon-blue);
+      box-shadow: 0 0 0 2px rgba(79, 131, 204, 0.2);
+    }
+    
+    .voice-button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f83cc, #805ad5);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-right: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(79, 131, 204, 0.3);
+    }
+    
+    .voice-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(79, 131, 204, 0.5);
+    }
+    
+    .voice-button.listening {
+      background: linear-gradient(135deg, #e53e3e, #d69e2e);
+      animation: pulse 1s infinite;
+    }
+    
+    .chat-send {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      border: none;
+      color: var(--moon-white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: var(--glow);
+    }
+    
+    .chat-send:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(79, 131, 204, 0.7);
+    }
+    
+    .copy-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(79, 131, 204, 0.2);
+      border: 1px solid rgba(79, 131, 204, 0.3);
+      color: var(--moon-white);
+      padding: 5px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 12px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .message:hover .copy-button {
+      opacity: 1;
+    }
+    
+    .copy-button:hover {
+      background: rgba(79, 131, 204, 0.4);
+      transform: scale(1.05);
+    }
+    
+    .copy-button.copied {
+      background: rgba(34, 197, 94, 0.4);
+      border-color: rgba(34, 197, 94, 0.5);
+    }
+    
+    /* Voice Input Animation */
+    .voice-animation {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 30px;
+    }
+    
+    .voice-bar {
+      width: 3px;
+      height: 100%;
+      background-color: var(--moon-blue);
+      border-radius: 3px;
+      animation: voiceWave 0.5s infinite alternate;
+    }
+    
+    .voice-bar:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+    
+    .voice-bar:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+    
+    .voice-bar:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+    
+    .voice-bar:nth-child(5) {
+      animation-delay: 0.4s;
+    }
+    
+    /* User Presence Indicators */
+    .user-presence-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 90;
+    }
+    
+    .user-presence {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: var(--moon-blue);
+      border-radius: 50%;
+      opacity: 0.7;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px var(--moon-blue);
+      transition: opacity 1s var(--transition-smooth);
+    }
+    
+    /* Animation Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s var(--transition-delayed), 
+                  transform 0.8s var(--transition-delayed);
+    }
+    
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.8s var(--transition-delayed), 
+                  transform 0.8s var(--transition-delayed);
+    }
+    
+    .reveal-left.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.8s var(--transition-delayed), 
+                  transform 0.8s var(--transition-delayed);
+    }
+    
+    .reveal-right.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .parallax {
+      position: relative;
+      will-change: transform;
+    }
+    
+    /* Custom Cursor */
+    .custom-cursor {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--moon-blue);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: width 0.3s, height 0.3s, border-color 0.3s;
+      mix-blend-mode: difference;
+      opacity: 1 !important; /* Force visibility */
+      background-color: rgba(79, 131, 204, 0.1);
+    }
+    
+    .cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background-color: var(--moon-purple);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      box-shadow: 0 0 10px var(--moon-blue);
+      opacity: 0;
+    }
+    
+    .cursor-hover {
+      width: 60px;
+      height: 60px;
+      border-color: var(--moon-purple);
+      background-color: rgba(79, 131, 204, 0.1);
+    }
+    
+    .cursor-trail {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background-color: var(--moon-blue);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9998;
+      mix-blend-mode: screen;
+      filter: blur(1px);
+    }
+    
+    /* Hide default cursor when custom cursor is active */
+    body.custom-cursor-active {
+      cursor: none;
+    }
+    
+    /* 3D Card Effects */
+    .feature-card {
+      transition: transform 0.5s var(--transition-bounce), box-shadow 0.5s var(--transition-smooth);
+      transform-style: preserve-3d;
+    }
+    
+    .feature-card:hover .feature-icon {
+      transform: translateZ(20px);
+    }
+    
+    .feature-icon {
+      transition: transform 0.5s var(--transition-bounce);
+      transform-style: preserve-3d;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+      
+      .mobile-menu-toggle {
+        display: block;
+      }
+      
+      .comparison-table {
+        font-size: 0.9rem;
+      }
+      
+      .comparison-table th,
+      .comparison-table td {
+        padding: 15px 10px;
+      }
+      
+      /* Disable custom cursor on mobile */
+      .custom-cursor, .cursor-dot {
+        display: none;
+      }
+      
+      body {
+        cursor: auto;
+      }
+    }
+  </style>
+</head>
+<body class="custom-cursor-active">
+  <!-- Splash Screen -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="avatar-container" id="avatarContainer"></div>
+    <h1 class="splash-title" id="splashTitle">Welcome to the Ultimate Performance</h1>
+    <p class="splash-subtitle" id="splashSubtitle">Experience the next generation of AI</p>
+    <div class="splash-progress">
+      <div class="splash-progress-bar" id="splashProgressBar"></div>
+    </div>
+  </div>
+  
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <img src="Copilot_20250723_202049.png" alt="Quanty Logo" class="logo-icon">
+      <div class="logo-text">Quantyx AI</div>
+    </div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#comparison">Capabilities</a>
+      <a href="#chat">Chat</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="mobile-menu-toggle">☰</button>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <button class="mobile-menu-close">×</button>
+    <nav class="mobile-nav">
+      <a href="#features" class="mobile-nav-item">Features</a>
+      <a href="#comparison" class="mobile-nav-item">Capabilities</a>
+      <a href="#chat" class="mobile-nav-item">Chat</a>
+      <a href="#about" class="mobile-nav-item">About</a>
+    </nav>
+  </div>
+  
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title identity-shift">The Ultimate AI Experience</h1>
+        <p class="hero-subtitle split-personality">Powered by advanced neural networks and quantum computing</p>
+        <a href="#chat" class="hero-cta suit-transition">Start Conversation</a>
+      </div>
+    </section>
+    
+    <!-- Prompt Section -->
+    <section class="prompt-section">
+      <h2 class="prompt-title reveal">Ask Me Anything</h2>
+      <p class="prompt-subtitle reveal">Type a prompt or ask a question to see the power of Quanty AI in action</p>
+      <div class="prompt-container reveal">
+        <input type="text" class="prompt-input" placeholder="e.g. 'Explain quantum computing in simple terms'" id="promptInput">
+        <button class="prompt-button" id="promptButton">Ask</button>
+      </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <h2 class="features-title reveal">Advanced Features</h2>
+      <p class="features-subtitle reveal">Discover what makes Quanty AI the most powerful assistant available</p>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">🧠</div>
+          <h3 class="feature-title">Advanced Intelligence</h3>
+          <p class="feature-description">Powered by state-of-the-art neural networks and machine learning algorithms for human-like understanding.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">🌐</div>
+          <h3 class="feature-title">Multilingual Support</h3>
+          <p class="feature-description">Communicate in over 100 languages with near-native fluency and cultural understanding.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">💻</div>
+          <h3 class="feature-title">Code Generation</h3>
+          <p class="feature-description">Write efficient, bug-free code in dozens of programming languages with detailed explanations.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">🎨</div>
+          <h3 class="feature-title">Creative Content</h3>
+          <p class="feature-description">Generate stories, poetry, scripts, and other creative content with unique style and flair.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">🔍</div>
+          <h3 class="feature-title">Research Assistant</h3>
+          <p class="feature-description">Analyze complex topics, synthesize information, and provide comprehensive summaries.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">🔊</div>
+          <h3 class="feature-title">Voice Interaction</h3>
+          <p class="feature-description">Natural voice recognition and response with emotional intelligence and contextual awareness.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Advanced Features Section -->
+    <section class="comparison" id="comparison">
+      <h2 class="comparison-title reveal">Advanced Capabilities</h2>
+      <p class="comparison-subtitle reveal">Discover the powerful features that make Quanty AI exceptional</p>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">🔮</div>
+          <h3 class="feature-title">Advanced Reasoning</h3>
+          <p class="feature-description">Superior reasoning capabilities for complex problem-solving and nuanced understanding.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">⚙️</div>
+          <h3 class="feature-title">Expert Code Generation</h3>
+          <p class="feature-description">Create sophisticated, optimized code across multiple programming languages.</p>
+        </div>
+        
+        <div class="feature-card reveal">
+          <div class="feature-icon">📝</div>
+          <h3 class="feature-title">Human-like Writing</h3>
+          <p class="feature-description">Generate creative, engaging, and contextually appropriate content for any purpose.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Chat Interface -->
+    <section class="chat-interface" id="chat">
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="chat-title">
+            <img src="Copilot_20250723_202049.png" alt="Quanty Logo" class="chat-icon">
+            <div class="chat-name">Quantyx AI</div>
+          </div>
+          <div class="chat-status">
+            <div class="status-indicator"></div>
+            <div>Online</div>
+          </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+          <div class="message message-ai" style="position: relative;">
+            <div class="message-content">Hello! I'm Quantyx, your advanced AI assistant. How can I help you today?</div>
+            <div class="message-time">Just now</div>
+            <button style="position: absolute; top: 5px; right: 5px; background: rgba(79, 131, 204, 0.3); border: none; border-radius: 4px; padding: 3px 6px; cursor: pointer; color: white; font-size: 14px; opacity: 0.7; transition: opacity 0.2s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.7'" onclick="navigator.clipboard.writeText(this.parentNode.querySelector('.message-content').innerText).then(() => {this.innerHTML='✓';setTimeout(() => {this.innerHTML='📋'}, 1000)});">📋</button>
+          </div>
+        </div>
+        
+        <div class="chat-input-container">
+          <input type="text" class="chat-input" placeholder="Type your message here..." id="chatInput">
+          <button class="voice-button" id="voiceButton" onclick="toggleVoice()" title="Voice Input (Ctrl+Shift+V)">
+            🎤
+          </button>
+          <button class="chat-send" id="chatSend">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Theme Symbol -->
+  <div class="moon-symbol"></div>
+  
+  <!-- Moon Phase -->
+  <div class="moon-phase"></div>
+  
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+  
+  <!-- User Presence Container -->
+  <div class="user-presence-container" id="userPresenceContainer"></div>
+  
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+  <!-- ML Libraries - JavaScript versions -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ml-matrix@6.10.4/lib/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.25.2/plotly.min.js"></script>
+  
+  <!-- All Working Scripts -->
+  <script src="api-config.js"></script>
+  <script src="system-optimizer.js"></script>
+  <script src="advanced-nlp.js"></script>
+  <script src="theme-effects.js"></script>
+  <script src="specialized-calculators.js"></script>
+  <script src="fixed-cursor.js"></script>
+  <script src="hero-3d.js"></script>
+  <script src="equation-solver.js"></script>
+  <script src="ml-processor.js"></script>
+
+  <script src="image-generator.js"></script>
+  <script src="ram-aware-optimizer.js"></script>
+  <script src="voice-input-system.js"></script>
+  <script src="openrouter-api.js"></script>
+  <script src="dictionary-api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize splash screen - only once
+      initSplashScreen();
+      
+      // Initialize scroll animations
+      initScrollAnimations();
+      
+      // Initialize chat functionality
+      initChat();
+      
+      // Initialize user presence simulation
+      initUserPresence();
+      
+      // Initialize prompt functionality
+      initPrompt();
+      
+      // Initialize voice input
+      initVoiceInput();
+      
+      // Prevent any automatic reloads or refreshes
+      window.onbeforeunload = function() {
+        // This will prevent automatic refreshes
+        return;
+      };
+    });
+    
+    // Splash screen initialization
+    function initSplashScreen() {
+      const splashScreen = document.getElementById('splashScreen');
+      const splashTitle = document.getElementById('splashTitle');
+      const splashSubtitle = document.getElementById('splashSubtitle');
+      const splashProgressBar = document.getElementById('splashProgressBar');
+      const avatarContainer = document.getElementById('avatarContainer');
+      
+      // Create 3D avatar if Three.js is available
+      if (window.THREE) {
+        create3DAvatar(avatarContainer);
+      }
+      
+      // Simulate loading progress
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(progressInterval);
+          
+          // Show title and subtitle
+          splashTitle.classList.add('visible');
+          splashSubtitle.classList.add('visible');
+          
+          // Hide splash screen after delay
+          setTimeout(() => {
+            splashScreen.classList.add('hidden');
+          }, 1000);
+        }
+        splashProgressBar.style.width = `${progress}%`;
+      }, 50);
+    }
+    
+    
+    // Create 3D avatar
+    function create3DAvatar(container) {
+      // Create scene
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      
+      renderer.setSize(300, 300);
+      container.appendChild(renderer.domElement);
+      
+      // Create sphere geometry for avatar base
+      const geometry = new THREE.SphereGeometry(1, 32, 32);
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x4f83cc,
+        emissive: 0x4f83cc,
+        emissiveIntensity: 0.2,
+        shininess: 100
+      });
+      
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+      
+      // Add rings around sphere
+      const ring1 = new THREE.Mesh(
+        new THREE.TorusGeometry(1.5, 0.05, 16, 100),
+        new THREE.MeshBasicMaterial({ color: 0x90cdf4, transparent: true, opacity: 0.7 })
+      );
+      ring1.rotation.x = Math.PI / 2;
+      scene.add(ring1);
+      
+      const ring2 = new THREE.Mesh(
+        new THREE.TorusGeometry(1.2, 0.05, 16, 100),
+        new THREE.MeshBasicMaterial({ color: 0x805ad5, transparent: true, opacity: 0.7 })
+      );
+      ring2.rotation.x = Math.PI / 4;
+      ring2.rotation.y = Math.PI / 4;
+      scene.add(ring2);
+      
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+      scene.add(ambientLight);
+      
+      // Add directional light
+      const directionalLight = new THREE.DirectionalLight(0x4f83cc, 1);
+      directionalLight.position.set(1, 1, 1);
+      scene.add(directionalLight);
+      
+      // Position camera
+      camera.position.z = 3;
+      
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        // Rotate sphere and rings
+        sphere.rotation.y += 0.01;
+        ring1.rotation.z += 0.005;
+        ring2.rotation.z -= 0.005;
+        
+        renderer.render(scene, camera);
+      }
+      
+      animate();
+    }
+    
+    // Initialize scroll animations with 3D effects
+    function initScrollAnimations() {
+      // Add 3D depth to elements
+      document.querySelectorAll('.feature-card, .hero-title, .hero-subtitle, .hero-cta').forEach(el => {
+        el.style.transformStyle = 'preserve-3d';
+      });
+      if (window.gsap && window.ScrollTrigger) {
+        // Register ScrollTrigger plugin
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Animate reveal elements
+        gsap.utils.toArray('.reveal').forEach(element => {
+          gsap.fromTo(element, 
+            { y: 50, opacity: 0 }, 
+            {
+              y: 0,
+              opacity: 1,
+              duration: 1,
+              scrollTrigger: {
+                trigger: element,
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+        
+        // Animate reveal-left elements
+        gsap.utils.toArray('.reveal-left').forEach(element => {
+          gsap.fromTo(element, 
+            { x: -50, opacity: 0 }, 
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1,
+              scrollTrigger: {
+                trigger: element,
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+        
+        // Animate reveal-right elements
+        gsap.utils.toArray('.reveal-right').forEach(element => {
+          gsap.fromTo(element, 
+            { x: 50, opacity: 0 }, 
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1,
+              scrollTrigger: {
+                trigger: element,
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+              }
+            }
+          );
+        });
+        
+        // Enhanced 3D parallax effects
+        gsap.utils.toArray('.parallax').forEach((element, i) => {
+          // Create different depths for different elements
+          const depth = i % 3 === 0 ? 100 : (i % 3 === 1 ? 50 : 150);
+          
+          gsap.fromTo(element,
+            { y: 0, z: 0 },
+            {
+              y: -50,
+              z: depth,
+              rotationX: i % 2 === 0 ? 5 : -5,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: element,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        });
+        
+        // Add 3D rotation to feature cards on scroll
+        gsap.utils.toArray('.feature-card').forEach((card, i) => {
+          gsap.fromTo(card,
+            { rotationY: 0 },
+            {
+              rotationY: (i % 2 === 0) ? 15 : -15,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        });
+      } else {
+        // Fallback for browsers without GSAP
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+          observer.observe(el);
+        });
+      }
+      
+      // Scroll progress indicator
+      const scrollProgress = document.createElement('div');
+      scrollProgress.className = 'scroll-progress';
+      document.body.appendChild(scrollProgress);
+      
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        scrollProgress.style.width = `${scrolled}%`;
+        
+        // Hide/show header based on scroll direction
+        if (winScroll > 100 && winScroll > lastScrollTop) {
+          document.getElementById('header').classList.add('hidden');
+        } else {
+          document.getElementById('header').classList.remove('hidden');
+        }
+        lastScrollTop = winScroll <= 0 ? 0 : winScroll;
+      });
+      
+      let lastScrollTop = 0;
+    }
+    
+    // Initialize chat functionality
+    function initChat() {
+      const chatInput = document.getElementById('chatInput');
+      const chatSend = document.getElementById('chatSend');
+      const chatMessages = document.getElementById('chatMessages');
+      
+      // Send message function
+      async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        // Add user message
+        addMessage(message, 'user');
+        
+        // Clear input
+        chatInput.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Check if it's a dictionary query first
+        if (typeof isDictionaryQuery === 'function' && isDictionaryQuery(message)) {
+          try {
+            // Extract the word to define
+            let word = message.trim();
+            
+            // Handle patterns like "define X" or "meaning of X"
+            if (word.toLowerCase().startsWith('define ')) {
+              word = word.substring(7).trim();
+            } else if (word.toLowerCase().startsWith('meaning of ')) {
+              word = word.substring(11).trim();
+            } else if (word.toLowerCase().startsWith('definition of ')) {
+              word = word.substring(14).trim();
+            } else if (word.toLowerCase().startsWith('what is ')) {
+              word = word.substring(8).trim();
+            } else if (word.toLowerCase().startsWith('what does ')) {
+              word = word.substring(10).trim();
+              if (word.toLowerCase().endsWith(' mean')) {
+                word = word.substring(0, word.length - 5).trim();
+              }
+            }
+            
+            const definition = await getDictionaryDefinition(word);
+            if (definition) {
+              // Remove typing indicator
+              removeTypingIndicator();
+              
+              // Add dictionary response
+              addMessage(definition, 'ai');
+              return;
+            }
+          } catch (error) {
+            console.error('Dictionary error:', error);
+            // Continue with normal processing if dictionary fails
+          }
+        }
+        
+        // Handle code generation first
+        if (isCodeGenerationRequest(message)) {
+          try {
+            console.log('💻 CODE GENERATION DETECTED');
+            const codeResult = await generateCode(message);
+            removeTypingIndicator();
+            addMessage(codeResult, 'ai');
+            return;
+          } catch (error) {
+            console.error('Code Generation Error:', error);
+            removeTypingIndicator();
+            addMessage('Failed to generate code. Please try again.', 'ai');
+            return;
+          }
+        }
+        
+        // Handle image generation
+        if (isImageGenerationRequest(message)) {
+          try {
+            console.log('🎨 IMAGE GENERATION DETECTED');
+            const imageResult = await generateImage(message);
+            removeTypingIndicator();
+            addMessage(imageResult, 'ai');
+            return;
+          } catch (error) {
+            console.error('Image Generation Error:', error);
+            removeTypingIndicator();
+            addMessage('Failed to generate image. Please try again.', 'ai');
+            return;
+          }
+        }
+        
+
+        
+        // Handle ML commands
+        if (message.toLowerCase().startsWith('analyze:') ||
+            message.toLowerCase().startsWith('plot:') ||
+            message.toLowerCase().startsWith('regression:') ||
+            message.toLowerCase().startsWith('matrix:')) {
+          
+          try {
+            const mlResponse = await processMLCommand(message);
+            removeTypingIndicator();
+            addMessage(mlResponse, 'ai');
+            return;
+          } catch (error) {
+            console.error('ML Command Error:', error);
+            removeTypingIndicator();
+            addMessage('ML processing error. Please check your command format.', 'ai');
+            return;
+          }
+        }
+        
+        // Handle special calculator commands directly
+        if (message.toLowerCase().startsWith('solve:') || 
+            message.toLowerCase().startsWith('calculate:') || 
+            message.toLowerCase().startsWith('geometry:') || 
+            message.toLowerCase().startsWith('trig:') || 
+            message.toLowerCase().startsWith('physics:') || 
+            message.toLowerCase().startsWith('chemistry:') || 
+            message.toLowerCase().startsWith('biology:')) {
+          
+          // Determine which calculator to use
+          const isCalculate = message.toLowerCase().startsWith('calculate:');
+          const isGeometry = message.toLowerCase().startsWith('geometry:');
+          const isTrig = message.toLowerCase().startsWith('trig:');
+          const isPhysics = message.toLowerCase().startsWith('physics:');
+          const isChemistry = message.toLowerCase().startsWith('chemistry:');
+          const isBiology = message.toLowerCase().startsWith('biology:');
+          
+          // Extract the problem based on prefix
+          let problem;
+          if (isCalculate) problem = message.substring(10).trim();
+          else if (isGeometry) problem = message.substring(9).trim();
+          else if (isTrig) problem = message.substring(5).trim();
+          else if (isPhysics) problem = message.substring(8).trim();
+          else if (isChemistry) problem = message.substring(10).trim();
+          else if (isBiology) problem = message.substring(8).trim();
+          else problem = message.substring(6).trim(); // solve:
+          
+          let aiResponse;
+          
+          // Handle specialized calculators
+          if (isGeometry && typeof geometryCalculator === 'function') {
+            aiResponse = geometryCalculator(problem);
+          }
+          else if (isTrig && typeof trigCalculator === 'function') {
+            aiResponse = trigCalculator(problem);
+          }
+          else if (isPhysics && typeof physicsCalculator === 'function') {
+            aiResponse = physicsCalculator(problem);
+          }
+          else if (isChemistry && typeof chemistryCalculator === 'function') {
+            aiResponse = chemistryCalculator(problem);
+          }
+          else if (isBiology && typeof biologyCalculator === 'function') {
+            aiResponse = biologyCalculator(problem);
+          }
+          // For simple calculations
+          else if (isCalculate) {
+            try {
+              // Sanitize the input to only allow safe arithmetic operations
+              const sanitizedProblem = problem.replace(/[^0-9+\-*/()\s.]/g, '');
+              
+              // Use Function constructor to safely evaluate the expression
+              const result = new Function('return ' + sanitizedProblem)();
+              
+              // Format the result
+              let formattedResult = result;
+              if (Number.isFinite(result) && !Number.isInteger(result)) {
+                formattedResult = result.toFixed(4).replace(/\.?0+$/, '');
+              }
+              
+              aiResponse = `Calculating: ${problem}\n\n${problem} = ${formattedResult}`;
+            } catch (e) {
+              aiResponse = `I couldn't calculate: ${problem}\n\nPlease check the format and try again.`;
+            }
+          } else {
+            // For other math problems, use the API
+            try {
+              removeTypingIndicator();
+              showTypingIndicator();
+              aiResponse = await callOpenRouterAPI(`code: Solve this math problem: ${problem}`);
+            } catch (error) {
+              aiResponse = `I encountered an error trying to solve: ${problem}\n\nPlease check the format and try again.`;
+            }
+          }
+          
+          // Remove typing indicator and show response
+          removeTypingIndicator();
+          addMessage(aiResponse, 'ai');
+          return;
+        }
+        
+        try {
+          // For all other queries, use the OpenRouter API with all models
+          console.log('📤 SENDING TO API:', message);
+          console.log('🔥 TRYING ALL MODELS IN ORDER: DeepSeek R1 Distill → Phi-3 → ChatGPT 4o → Gemini 2.5 → Kimi → DeepSeek R1');
+          
+          const aiResponse = await callOpenRouterAPI(message);
+          console.log('📥 GOT RESPONSE:', aiResponse ? 'SUCCESS' : 'FAILED');
+          
+          // Remove typing indicator
+          removeTypingIndicator();
+          
+          // Add AI response
+          if (aiResponse && aiResponse.trim()) {
+            addMessage(aiResponse, 'ai');
+          } else {
+            addMessage('I received an empty response. Please try rephrasing your question.', 'ai');
+          }
+        } catch (error) {
+          console.error('❌ API ERROR:', error);
+          
+          // Remove typing indicator
+          removeTypingIndicator();
+          
+          // Try DuckDuckGo as final fallback
+          try {
+            console.log('🦆 TRYING DUCKDUCKGO FALLBACK');
+            const fallbackResponse = await simpleDuckDuckGo(message);
+            console.log('🦆 DUCKDUCKGO RESPONSE:', fallbackResponse ? 'SUCCESS' : 'FAILED');
+            addMessage(fallbackResponse, 'ai');
+          } catch (fallbackError) {
+            console.error('🦆 DUCKDUCKGO ERROR:', fallbackError);
+            addMessage('All systems are currently unavailable. Please try again in a moment.', 'ai');
+          }
+        }
+      }
+      
+      // Add message to chat
+      function addMessage(content, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${type}`;
+        messageDiv.style.position = 'relative'; // For copy button positioning
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        
+        // Format the content with code blocks, etc.
+        if (type === 'ai') {
+          // Handle code blocks
+          content = content.replace(/```([\s\S]*?)```/g, (match, code) => {
+            return `<pre style="background-color: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; overflow-x: auto; margin: 10px 0;"><code>${code}</code></pre>`;
+          });
+          
+          // Handle inline code
+          content = content.replace(/`([^`]+)`/g, '<code style="background-color: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">$1</code>');
+          
+          // Handle line breaks
+          content = content.replace(/\n/g, '<br>');
+          
+          // Set innerHTML instead of textContent
+          messageContent.innerHTML = content;
+          
+          // Add copy button to AI messages
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-button';
+          copyBtn.innerHTML = '📋 Copy';
+          copyBtn.title = 'Copy response';
+          
+          copyBtn.addEventListener('click', () => {
+            const textToCopy = messageContent.innerText;
+            navigator.clipboard.writeText(textToCopy)
+              .then(() => {
+                copyBtn.innerHTML = '✅ Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                  copyBtn.innerHTML = '📋 Copy';
+                  copyBtn.classList.remove('copied');
+                }, 2000);
+              })
+              .catch(err => {
+                console.error('Failed to copy: ', err);
+                copyBtn.innerHTML = '❌ Failed';
+                setTimeout(() => {
+                  copyBtn.innerHTML = '📋 Copy';
+                }, 2000);
+              });
+          });
+          
+          messageDiv.appendChild(copyBtn);
+        } else {
+          // For user messages, just use text
+          messageContent.textContent = content;
+        }
+        
+        const messageTime = document.createElement('div');
+        messageTime.className = 'message-time';
+        messageTime.textContent = 'Just now';
+        
+        messageDiv.appendChild(messageContent);
+        messageDiv.appendChild(messageTime);
+        
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      // Show typing indicator
+      function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message message-ai typing-indicator';
+        typingDiv.id = 'typingIndicator';
+        
+        const typingContent = document.createElement('div');
+        typingContent.className = 'message-content';
+        
+        const voiceAnimation = document.createElement('div');
+        voiceAnimation.className = 'voice-animation';
+        
+        for (let i = 0; i < 5; i++) {
+          const bar = document.createElement('div');
+          bar.className = 'voice-bar';
+          voiceAnimation.appendChild(bar);
+        }
+        
+        typingContent.appendChild(voiceAnimation);
+        typingDiv.appendChild(typingContent);
+        
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      // Remove typing indicator
+      function removeTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+      
+      // Event listeners
+      chatSend.addEventListener('click', sendMessage);
+      chatInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+    }
+    
+    // Initialize prompt functionality
+    function initPrompt() {
+      const promptInput = document.getElementById('promptInput');
+      const promptButton = document.getElementById('promptButton');
+      
+      promptButton.addEventListener('click', () => {
+        const prompt = promptInput.value.trim();
+        if (!prompt) return;
+        
+        // Scroll to chat section
+        document.getElementById('chat').scrollIntoView({ behavior: 'smooth' });
+        
+        // Set chat input value to prompt
+        document.getElementById('chatInput').value = prompt;
+        
+        // Trigger send after scroll completes
+        setTimeout(() => {
+          document.getElementById('chatSend').click();
+        }, 1000);
+      });
+    }
+    
+    // Initialize user presence simulation
+    function initUserPresence() {
+      const container = document.getElementById('userPresenceContainer');
+      
+      // Clear any existing interval to prevent duplicates
+      if (window.userPresenceInterval) {
+        clearInterval(window.userPresenceInterval);
+      }
+      
+      // Create random user indicators - store reference to prevent duplicates
+      window.userPresenceInterval = setInterval(() => {
+        if (Math.random() > 0.7) {
+          const x = Math.random() * window.innerWidth;
+          const y = Math.random() * window.innerHeight;
+          
+          const indicator = document.createElement('div');
+          indicator.className = 'user-presence';
+          indicator.style.left = `${x}px`;
+          indicator.style.top = `${y}px`;
+          
+          container.appendChild(indicator);
+          
+          // Animate and remove
+          setTimeout(() => {
+            indicator.style.opacity = '0';
+            setTimeout(() => {
+              indicator.remove();
+            }, 1000);
+          }, 2000);
+        }
+      }, 3000);
+    }
+    
+    // Voice Input Functions
+    let isListening = false;
+    let recognition = null;
+    
+    function initVoiceInput() {
+      // Initialize speech recognition
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          document.getElementById('chatInput').value = transcript;
+          stopVoiceInput();
+        };
+        
+        recognition.onerror = function(event) {
+          console.error('Speech recognition error:', event.error);
+          stopVoiceInput();
+        };
+        
+        recognition.onend = function() {
+          stopVoiceInput();
+        };
+      }
+      
+      // Keyboard shortcut
+      document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.shiftKey && event.key === 'V') {
+          event.preventDefault();
+          toggleVoice();
+        }
+      });
+    }
+    
+    function toggleVoice() {
+      if (isListening) {
+        stopVoiceInput();
+      } else {
+        startVoiceInput();
+      }
+    }
+    
+    function startVoiceInput() {
+      if (!recognition) {
+        alert('Speech recognition not supported in this browser');
+        return;
+      }
+      
+      isListening = true;
+      const voiceButton = document.getElementById('voiceButton');
+      voiceButton.classList.add('listening');
+      voiceButton.innerHTML = '🔴';
+      
+      recognition.start();
+      console.log('🎤 Voice input started');
+    }
+    
+    function stopVoiceInput() {
+      if (recognition && isListening) {
+        recognition.stop();
+      }
+      
+      isListening = false;
+      const voiceButton = document.getElementById('voiceButton');
+      voiceButton.classList.remove('listening');
+      voiceButton.innerHTML = '🎤';
+      
+      console.log('🎤 Voice input stopped');
+    }
+    
+    // Copy message function
+    function copyMessage(button) {
+      const messageDiv = button.parentElement;
+      const messageText = messageDiv.textContent.replace('📋 Copy', '').trim();
+      
+      navigator.clipboard.writeText(messageText).then(() => {
+        button.innerHTML = '✅ Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(() => {
+          button.innerHTML = '📋 Copy';
+          button.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Copy failed:', err);
+        button.innerHTML = '❌ Failed';
+        setTimeout(() => {
+          button.innerHTML = '📋 Copy';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

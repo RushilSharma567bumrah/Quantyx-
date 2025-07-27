@@ -1,0 +1,40 @@
+/* Chat Interface Styles */
+:root {
+  --primary-color: #4f83cc;
+  --secondary-color: #805ad5;
+  --dark-bg: #1a202c;
+  --darker-bg: #171923;
+  --light-text: #f7fafc;
+  --gray-text: #cbd5e0;
+  --border-color: rgba(79, 131, 204, 0.3);
+  --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --glow: 0 0 15px rgba(79, 131, 204, 0.7);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,3310 @@
+/* 
+ * ATOM THEME - QUANTUM INTERFACE
+ * Advanced 3D dark interface with Atom-inspired design elements
+ */
+
+:root.theme-atom {
+  /* Core Color Palette */
+  --primary: #00bcd4;
+  --primary-dark: #008ba3;
+  --primary-light: #62efff;
+  --secondary: #7e57c2;
+  --accent: #64ffda;
+  --background: #263238;
+  --surface: #37474f;
+  --surface-variant: #455a64;
+  --text-primary: #eceff1;
+  --text-secondary: #b0bec5;
+  --text-tertiary: #78909c;
+  
+  /* Atom-Specific Colors */
+  --atom-teal: #00bcd4;
+  --atom-dark: #263238;
+  --atom-darker: #1c2529;
+  --atom-blue: #0277bd;
+  --atom-green: #64ffda;
+  --atom-purple: #7e57c2;
+  --atom-orange: #ff9800;
+  --atom-red: #f44336;
+  --atom-gray: #546e7a;
+  --atom-light: #eceff1;
+  
+  /* Effects */
+  --border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 15px rgba(0, 188, 212, 0.7);
+  --gradient-primary: linear-gradient(135deg, var(--atom-teal) 0%, var(--atom-blue) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--atom-blue) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--atom-green) 0%, var(--atom-teal) 100%);
+  --logo-filter: drop-shadow(0 0 10px rgba(0, 188, 212, 0.7));
+  
+  /* Animation Speeds */
+  --speed-fast: 0.2s;
+  --speed-normal: 0.5s;
+  --speed-slow: 1s;
+  
+  /* Font Families */
+  --font-main: 'Roboto', 'Segoe UI', sans-serif;
+  --font-display: 'Roboto Condensed', 'Arial', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  
+  /* Theme-specific variables */
+  --theme-name: "Atom";
+  --theme-intro: "Welcome to the Quantum Interface.";
+  --theme-subtitle: "Where code meets intelligence.";
+  --theme-accent-phrase: "Accelerating human potential.";
+  --theme-particle-color-1: 0, 188, 212;  /* RGB for JS use */
+  --theme-particle-color-2: 2, 119, 189;  /* RGB for JS use */
+  --theme-ambient-light: 38, 50, 56;      /* RGB for JS use */
+  --theme-directional-light: 0, 188, 212; /* RGB for JS use */
+  --theme-fog-color: 28, 37, 41;          /* RGB for JS use */
+  --theme-bloom-strength: 0.7;
+  --theme-bloom-radius: 0.5;
+  --theme-bloom-threshold: 0.8;
+}
+
+/* Base Reset - Applied to all themes */
+.theme-atom *, 
+.theme-atom *::before, 
+.theme-atom *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.theme-atom body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  perspective: 1000px;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Scrollbar */
+.theme-atom ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-atom ::-webkit-scrollbar-track {
+  background: var(--atom-darker);
+}
+
+.theme-atom ::-webkit-scrollbar-thumb {
+  background: var(--atom-teal);
+  border-radius: 3px;
+}
+
+.theme-atom ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* 3D Canvas Container */
+.theme-atom .webgl-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Loading Screen */
+.theme-atom .loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--atom-darker);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-atom .loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-atom .theme-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 40px;
+  filter: var(--logo-filter);
+  animation: pulse 2s infinite;
+}
+
+.theme-atom .loading-bar-container {
+  width: 300px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.theme-atom .loading-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.5s ease-out;
+}
+
+/* Intro Sequence */
+.theme-atom .intro-sequence {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--atom-darker);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-atom .intro-sequence.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.theme-atom .intro-sequence.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-atom .intro-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  text-align: center;
+  margin: 20px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  max-width: 80%;
+}
+
+.theme-atom .intro-line.visible {
+  animation: fadeInUp 1s forwards;
+}
+
+.theme-atom .intro-line-1 {
+  color: var(--text-secondary);
+}
+
+.theme-atom .intro-line-2 {
+  color: var(--atom-light);
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+}
+
+.theme-atom .intro-line-3 {
+  color: var(--atom-green);
+  font-weight: bold;
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.theme-atom .intro-line-4 {
+  color: var(--atom-teal);
+}
+
+.theme-atom .intro-line-5 {
+  color: var(--atom-purple);
+  font-weight: bold;
+}
+
+/* Main Interface */
+.theme-atom .main-interface {
+  position: relative;
+  min-height: 100vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-atom .main-interface.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Header */
+.theme-atom .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: rgba(38, 50, 56, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.theme-atom .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-atom .logo-icon {
+  width: 40px;
+  height: 40px;
+  filter: var(--logo-filter);
+}
+
+.theme-atom .logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--atom-light);
+  letter-spacing: 1px;
+}
+
+.theme-atom .nav {
+  display: flex;
+  gap: 30px;
+}
+
+.theme-atom .nav-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.theme-atom .nav-item:hover {
+  color: var(--atom-green);
+}
+
+.theme-atom .nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--atom-green);
+  transition: width 0.3s ease;
+}
+
+.theme-atom .nav-item:hover::after {
+  width: 100%;
+}
+
+/* Hero Section */
+.theme-atom .hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+.theme-atom .hero-content {
+  max-width: 800px;
+  text-align: center;
+  z-index: 2;
+}
+
+.theme-atom .hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  margin-bottom: 20px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  background: linear-gradient(to right, var(--atom-teal), var(--atom-green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(0, 188, 212, 0.3);
+}
+
+.theme-atom .hero-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+}
+
+.theme-atom .hero-cta {
+  display: inline-block;
+  padding: 15px 40px;
+  background: var(--gradient-primary);
+  color: var(--atom-light);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow);
+}
+
+.theme-atom .hero-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
+}
+
+.theme-atom .hero-cta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 188, 212, 0.5);
+}
+
+.theme-atom .hero-cta:hover::before {
+  left: 100%;
+}
+
+/* Chat Interface */
+.theme-atom .chat-container {
+  max-width: 1200px;
+  margin: 100px auto;
+  background: rgba(55, 71, 79, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  position: relative;
+}
+
+.theme-atom .chat-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+}
+
+.theme-atom .chat-header {
+  padding: 20px;
+  background: rgba(38, 50, 56, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-atom .chat-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-atom .chat-icon {
+  width: 30px;
+  height: 30px;
+  filter: var(--logo-filter);
+}
+
+.theme-atom .chat-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--atom-green);
+}
+
+.theme-atom .chat-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.theme-atom .status-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: var(--atom-teal);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.theme-atom .chat-messages {
+  height: 500px;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.theme-atom .message {
+  max-width: 80%;
+  padding: 15px 20px;
+  border-radius: 10px;
+  position: relative;
+  animation: fadeIn 0.5s forwards;
+}
+
+.theme-atom .message-user {
+  align-self: flex-end;
+  background: var(--surface-variant);
+  border-bottom-right-radius: 0;
+  color: var(--atom-light);
+}
+
+.theme-atom .message-ai {
+  align-self: flex-start;
+  background: var(--gradient-primary);
+  border-bottom-left-radius: 0;
+  color: var(--atom-light);
+  box-shadow: var(--glow);
+}
+
+.theme-atom .message-time {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 5px;
+  text-align: right;
+}
+
+.theme-atom .chat-input-container {
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(38, 50, 56, 0.9);
+}
+
+.theme-atom .chat-input {
+  flex: 1;
+  padding: 15px 20px;
+  background: rgba(69, 90, 100, 0.5);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  border-radius: 5px;
+  color: var(--atom-light);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-atom .chat-input:focus {
+  outline: none;
+  border-color: var(--atom-teal);
+  box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+}
+
+.theme-atom .chat-send {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--atom-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--glow);
+}
+
+.theme-atom .chat-send:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.7);
+}
+
+/* Voice Input Animation */
+.theme-atom .voice-animation {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 30px;
+}
+
+.theme-atom .voice-bar {
+  width: 3px;
+  height: 100%;
+  background-color: var(--atom-teal);
+  border-radius: 3px;
+  animation: voiceWave 0.5s infinite alternate;
+}
+
+.theme-atom .voice-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.theme-atom .voice-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.theme-atom .voice-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.theme-atom .voice-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+/* 3D Model Container */
+.theme-atom .model-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  height: 200px;
+  z-index: 10;
+}
+
+/* Performance Metrics */
+.theme-atom .performance-metrics {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: rgba(38, 50, 56, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  z-index: 100;
+  transform: translateX(300px);
+  transition: transform 0.5s ease;
+}
+
+.theme-atom .performance-metrics.visible {
+  transform: translateX(0);
+}
+
+.theme-atom .metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-atom .metrics-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--atom-green);
+}
+
+.theme-atom .metrics-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.theme-atom .metric-item {
+  margin-bottom: 10px;
+}
+
+.theme-atom .metric-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.theme-atom .metric-value {
+  float: right;
+  color: var(--atom-light);
+}
+
+.theme-atom .metric-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.theme-atom .metric-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Custom Cursor */
+.theme-atom .cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--atom-teal);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+.theme-atom .cursor-dot {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background-color: var(--atom-green);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+}
+
+/* Theme-specific Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes voiceWave {
+  0% {
+    height: 10%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+  }
+  40% {
+    transform: translate(-5px, -5px);
+  }
+  60% {
+    transform: translate(5px, 5px);
+  }
+  80% {
+    transform: translate(5px, -5px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Atom-specific Elements */
+.theme-atom .atom-symbol {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0.03;
+  z-index: -1;
+  width: 800px;
+  height: 800px;
+  background-image: url('/assets/images/atom-symbol.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+.theme-atom .atom-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 188, 212, 0.1) 0%, rgba(38, 50, 56, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(20px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .theme-atom .nav {
+    display: none;
+  }
+  
+  .theme-atom .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .theme-atom .chat-container {
+    margin: 80px 20px;
+  }
+  
+  .theme-atom .performance-metrics {
+    width: 100%;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    border-radius: 10px 10px 0 0;
+    transform: translateY(100%);
+  }
+  
+  .theme-atom .performance-metrics.visible {
+    transform: translateY(0);
+  }
+  
+  .theme-atom .model-container {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Mobile Menu */
+.theme-atom .mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--atom-light);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.theme-atom .mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  height: 100vh;
+  background: rgba(38, 50, 56, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 80px 40px;
+  transition: right 0.5s ease;
+}
+
+.theme-atom .mobile-menu.active {
+  right: 0;
+}
+
+.theme-atom .mobile-menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--atom-light);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.theme-atom .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.theme-atom .mobile-nav-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.theme-atom .mobile-nav-item:hover {
+  color: var(--atom-green);
+}
+
+/* Noise Overlay */
+.theme-atom .noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4AcGEgUFvtN3BgAAACZJREFUaN7t1rENACAMBEEI7L+xW4X0AtIQEbnKN9s9cpcDAACwwQMQZgHGlvC+RAAAAABJRU5ErkJggg==');
+  opacity: 0.03;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Scroll Progress Indicator */
+.theme-atom .scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  z-index: 1001;
+  transition: width 0.1s ease;
+}
+
+/* Theme Switcher */
+.theme-atom .theme-switcher {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: rgba(38, 50, 56, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-atom .theme-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-atom .theme-option:hover {
+  background-color: rgba(69, 90, 100, 0.5);
+}
+
+.theme-atom .theme-option.active {
+  background-color: rgba(0, 188, 212, 0.2);
+}
+
+.theme-atom .theme-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.theme-atom .theme-batman-color {
+  background: linear-gradient(135deg, #0a0a0a 50%, #0066ff 50%);
+}
+
+.theme-atom .theme-moonlight-color {
+  background: linear-gradient(135deg, #ffffff 50%, #4f83cc 50%);
+}
+
+.theme-atom .theme-atom-color {
+  background: linear-gradient(135deg, #263238 50%, #00bcd4 50%);
+}
+
+.theme-atom .theme-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Atom-specific Utility Classes */
+.theme-atom .atom-button {
+  display: inline-block;
+  padding: 12px 25px;
+  background: var(--gradient-primary);
+  color: var(--atom-light);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow);
+  border: none;
+  cursor: pointer;
+}
+
+.theme-atom .atom-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 188, 212, 0.5);
+}
+
+.theme-atom .text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.theme-atom .glow-text {
+  text-shadow: 0 0 10px rgba(0, 188, 212, 0.7);
+}
+
+/* Atom Orbital Animation */
+.theme-atom .orbital {
+  position: absolute;
+  border: 1px solid rgba(0, 188, 212, 0.3);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  animation: rotate 20s linear infinite;
+}
+
+.theme-atom .orbital-1 {
+  width: 300px;
+  height: 300px;
+  transform: rotateX(60deg) rotateY(0deg);
+}
+
+.theme-atom .orbital-2 {
+  width: 250px;
+  height: 250px;
+  transform: rotateX(0deg) rotateY(60deg);
+  animation-duration: 15s;
+}
+
+.theme-atom .orbital-3 {
+  width: 200px;
+  height: 200px;
+  transform: rotateX(30deg) rotateY(30deg);
+  animation-duration: 10s;
+}
+
+.theme-atom .electron {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: var(--atom-teal);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--atom-teal);
+  transform: translate(-50%, -50%);
+}
+
+.theme-atom .electron-1 {
+  top: 0;
+  left: 50%;
+  animation: electronMove1 20s linear infinite;
+}
+
+.theme-atom .electron-2 {
+  top: 50%;
+  left: 0;
+  animation: electronMove2 15s linear infinite;
+}
+
+.theme-atom .electron-3 {
+  top: 50%;
+  right: 0;
+  animation: electronMove3 10s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateX(60deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(60deg) rotateY(360deg);
+  }
+}
+
+@keyframes electronMove1 {
+  0% {
+    top: 0;
+    left: 50%;
+  }
+  25% {
+    top: 50%;
+    left: 100%;
+  }
+  50% {
+    top: 100%;
+    left: 50%;
+  }
+  75% {
+    top: 50%;
+    left: 0;
+  }
+  100% {
+    top: 0;
+    left: 50%;
+  }
+}
+
+@keyframes electronMove2 {
+  0% {
+    top: 50%;
+    left: 0;
+  }
+  25% {
+    top: 0;
+    left: 50%;
+  }
+  50% {
+    top: 50%;
+    left: 100%;
+  }
+  75% {
+    top: 100%;
+    left: 50%;
+  }
+  100% {
+    top: 50%;
+    left: 0;
+  }
+}
+
+@keyframes electronMove3 {
+  0% {
+    top: 50%;
+    right: 0;
+  }
+  25% {
+    top: 100%;
+    right: 50%;
+  }
+  50% {
+    top: 50%;
+    right: 100%;
+  }
+  75% {
+    top: 0;
+    right: 50%;
+  }
+  100% {
+    top: 50%;
+    right: 0;
+  }
+}
+
+/* Code Syntax Highlighting */
+.theme-atom .code-block {
+  background-color: var(--atom-darker);
+  border-radius: 5px;
+  padding: 15px;
+  margin: 15px 0;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  overflow-x: auto;
+  position: relative;
+}
+
+.theme-atom .code-block::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.theme-atom .code-keyword {
+  color: var(--atom-purple);
+}
+
+.theme-atom .code-string {
+  color: var(--atom-green);
+}
+
+.theme-atom .code-comment {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.theme-atom .code-function {
+  color: var(--atom-teal);
+}
+
+.theme-atom .code-number {
+  color: var(--atom-orange);
+}
+
+.theme-atom .hidden {
+  display: none !important;
+}
+
+.theme-atom .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.theme-atom .focus-visible {
+  outline: 2px solid var(--atom-teal);
+  outline-offset: 2px;
+}
+.theme-atom .focus-visible:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--atom-teal);
+}
+.theme-atom .focus-visible:focus-visible {
+  outline: 2px solid var(--atom-teal);
+  outline-offset: 2px;
+}
+.theme-atom .focus-visible:focus:not(:focus-visible) {
+  outline: none;
+}
+.theme-atom .focus-visible:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+.theme-atom .focus-visible:focus-visible {
+  outline: 2px solid var(--atom-teal);
+  outline-offset: 2px;
+}
+
+
+.theme-atom .focus-visible:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+
+
+/* 
+ * BATMAN THEME - DARK KNIGHT INTERFACE
+ * Advanced 3D dark interface with Batman-inspired design elements
+ */
+
+:root.theme-batman {
+  /* Core Color Palette */
+  --primary: #0066ff;
+  --primary-dark: #0044cc;
+  --primary-light: #4d94ff;
+  --secondary: #ff3366;
+  --accent: #ffca28;
+  --background: #0a0a0a;
+  --surface: #1a1a1a;
+  --surface-variant: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-tertiary: #9e9e9e;
+  
+  /* Batman-Specific Colors */
+  --bat-black: #0a0a0a;
+  --bat-dark: #1a1a1a;
+  --bat-gray: #333333;
+  --bat-yellow: #ffca28;
+  --bat-gold: #ffc107;
+  --bat-blue: #0d47a1;
+  --bat-light-blue: #2196f3;
+  --bat-silver: #e0e0e0;
+  --bat-white: #f5f5f5;
+  --accent-red: #ff1744;
+  --accent-purple: #6200ea;
+  
+  /* Effects */
+  --border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 15px rgba(33, 150, 243, 0.7);
+  --gradient-primary: linear-gradient(135deg, var(--bat-blue) 0%, var(--accent-purple) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--accent-purple) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--bat-yellow) 0%, var(--bat-gold) 100%);
+  --logo-filter: drop-shadow(0 0 10px rgba(33, 150, 243, 0.7));
+  
+  /* Animation Speeds */
+  --speed-fast: 0.2s;
+  --speed-normal: 0.5s;
+  --speed-slow: 1s;
+  
+  /* Font Families */
+  --font-main: 'Gotham', 'Segoe UI', sans-serif;
+  --font-display: 'Gotham Black', 'Arial Black', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Theme-specific variables */
+  --theme-name: "Batman";
+  --theme-intro: "Welcome... to the Ultimate Performance.";
+  --theme-subtitle: "This isn't a chatbot. It's your Copilot.";
+  --theme-accent-phrase: "We do things differently.";
+  --theme-particle-color-1: 13, 71, 161;  /* RGB for JS use */
+  --theme-particle-color-2: 98, 0, 234;   /* RGB for JS use */
+  --theme-ambient-light: 51, 51, 51;      /* RGB for JS use */
+  --theme-directional-light: 33, 150, 243; /* RGB for JS use */
+  --theme-fog-color: 10, 10, 10;          /* RGB for JS use */
+  --theme-bloom-strength: 0.5;
+  --theme-bloom-radius: 0.4;
+  --theme-bloom-threshold: 0.85;
+}
+
+/* Base Reset - Applied to all themes */
+.theme-batman *, 
+.theme-batman *::before, 
+.theme-batman *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.theme-batman body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  perspective: 1000px;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Scrollbar */
+.theme-batman ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-batman ::-webkit-scrollbar-track {
+  background: var(--bat-dark);
+}
+
+.theme-batman ::-webkit-scrollbar-thumb {
+  background: var(--bat-blue);
+  border-radius: 3px;
+}
+
+.theme-batman ::-webkit-scrollbar-thumb:hover {
+  background: var(--bat-light-blue);
+}
+
+/* 3D Canvas Container */
+.theme-batman .webgl-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Loading Screen */
+.theme-batman .loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bat-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-batman .loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-batman .theme-logo {
+  width: 120px;
+  height: 60px;
+  margin-bottom: 40px;
+  filter: var(--logo-filter);
+  animation: pulse 2s infinite;
+}
+
+.theme-batman .loading-bar-container {
+  width: 300px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.theme-batman .loading-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.5s ease-out;
+}
+
+/* Intro Sequence */
+.theme-batman .intro-sequence {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bat-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-batman .intro-sequence.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.theme-batman .intro-sequence.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-batman .intro-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  text-align: center;
+  margin: 20px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  max-width: 80%;
+}
+
+.theme-batman .intro-line.visible {
+  animation: fadeInUp 1s forwards;
+}
+
+.theme-batman .intro-line-1 {
+  color: var(--bat-silver);
+}
+
+.theme-batman .intro-line-2 {
+  color: var(--bat-white);
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+}
+
+.theme-batman .intro-line-3 {
+  color: var(--bat-gold);
+  font-weight: bold;
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.theme-batman .intro-line-4 {
+  color: var(--bat-light-blue);
+}
+
+.theme-batman .intro-line-5 {
+  color: var(--bat-yellow);
+  font-weight: bold;
+}
+
+/* Main Interface */
+.theme-batman .main-interface {
+  position: relative;
+  min-height: 100vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-batman .main-interface.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Header */
+.theme-batman .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.theme-batman .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-batman .logo-icon {
+  width: 40px;
+  height: 40px;
+  filter: var(--logo-filter);
+}
+
+.theme-batman .logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--bat-white);
+  letter-spacing: 1px;
+}
+
+.theme-batman .nav {
+  display: flex;
+  gap: 30px;
+}
+
+.theme-batman .nav-item {
+  color: var(--bat-silver);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.theme-batman .nav-item:hover {
+  color: var(--bat-yellow);
+}
+
+.theme-batman .nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--bat-yellow);
+  transition: width 0.3s ease;
+}
+
+.theme-batman .nav-item:hover::after {
+  width: 100%;
+}
+
+/* Hero Section */
+.theme-batman .hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+.theme-batman .hero-content {
+  max-width: 800px;
+  text-align: center;
+  z-index: 2;
+}
+
+.theme-batman .hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  margin-bottom: 20px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  background: linear-gradient(to right, var(--bat-silver), var(--bat-yellow));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(255, 202, 40, 0.3);
+}
+
+.theme-batman .hero-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--bat-silver);
+  margin-bottom: 40px;
+}
+
+.theme-batman .hero-cta {
+  display: inline-block;
+  padding: 15px 40px;
+  background: var(--gradient-primary);
+  color: var(--bat-white);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow);
+}
+
+.theme-batman .hero-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
+}
+
+.theme-batman .hero-cta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(13, 71, 161, 0.5);
+}
+
+.theme-batman .hero-cta:hover::before {
+  left: 100%;
+}
+
+/* Chat Interface */
+.theme-batman .chat-container {
+  max-width: 1200px;
+  margin: 100px auto;
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  position: relative;
+}
+
+.theme-batman .chat-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+}
+
+.theme-batman .chat-header {
+  padding: 20px;
+  background: rgba(10, 10, 10, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-batman .chat-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-batman .chat-icon {
+  width: 30px;
+  height: 30px;
+  filter: var(--logo-filter);
+}
+
+.theme-batman .chat-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--bat-yellow);
+}
+
+.theme-batman .chat-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bat-silver);
+  font-size: 0.9rem;
+}
+
+.theme-batman .status-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: var(--bat-light-blue);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.theme-batman .chat-messages {
+  height: 500px;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.theme-batman .message {
+  max-width: 80%;
+  padding: 15px 20px;
+  border-radius: 10px;
+  position: relative;
+  animation: fadeIn 0.5s forwards;
+}
+
+.theme-batman .message-user {
+  align-self: flex-end;
+  background: var(--bat-gray);
+  border-bottom-right-radius: 0;
+  color: var(--bat-white);
+}
+
+.theme-batman .message-ai {
+  align-self: flex-start;
+  background: var(--gradient-primary);
+  border-bottom-left-radius: 0;
+  color: var(--bat-white);
+  box-shadow: var(--glow);
+}
+
+.theme-batman .message-time {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 5px;
+  text-align: right;
+}
+
+.theme-batman .chat-input-container {
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 10, 0.9);
+}
+
+.theme-batman .chat-input {
+  flex: 1;
+  padding: 15px 20px;
+  background: rgba(51, 51, 51, 0.5);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 5px;
+  color: var(--bat-white);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-batman .chat-input:focus {
+  outline: none;
+  border-color: var(--bat-light-blue);
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.theme-batman .chat-send {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--bat-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--glow);
+}
+
+.theme-batman .chat-send:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.7);
+}
+
+/* Voice Input Animation */
+.theme-batman .voice-animation {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 30px;
+}
+
+.theme-batman .voice-bar {
+  width: 3px;
+  height: 100%;
+  background-color: var(--bat-light-blue);
+  border-radius: 3px;
+  animation: voiceWave 0.5s infinite alternate;
+}
+
+.theme-batman .voice-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.theme-batman .voice-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.theme-batman .voice-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.theme-batman .voice-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+/* 3D Model Container */
+.theme-batman .model-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  height: 200px;
+  z-index: 10;
+}
+
+/* Performance Metrics */
+.theme-batman .performance-metrics {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  z-index: 100;
+  transform: translateX(300px);
+  transition: transform 0.5s ease;
+}
+
+.theme-batman .performance-metrics.visible {
+  transform: translateX(0);
+}
+
+.theme-batman .metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-batman .metrics-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--bat-yellow);
+}
+
+.theme-batman .metrics-close {
+  background: none;
+  border: none;
+  color: var(--bat-silver);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.theme-batman .metric-item {
+  margin-bottom: 10px;
+}
+
+.theme-batman .metric-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--bat-silver);
+  margin-bottom: 5px;
+}
+
+.theme-batman .metric-value {
+  float: right;
+  color: var(--bat-white);
+}
+
+.theme-batman .metric-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.theme-batman .metric-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Custom Cursor */
+.theme-batman .cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--bat-light-blue);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+.theme-batman .cursor-dot {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background-color: var(--bat-yellow);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+}
+
+/* Theme-specific Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes voiceWave {
+  0% {
+    height: 10%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+  }
+  40% {
+    transform: translate(-5px, -5px);
+  }
+  60% {
+    transform: translate(5px, 5px);
+  }
+  80% {
+    transform: translate(5px, -5px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Batman-specific Elements */
+.theme-batman .bat-symbol {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0.03;
+  z-index: -1;
+  width: 800px;
+  height: 400px;
+  background-image: url('/assets/images/bat-symbol.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+.theme-batman .bat-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, rgba(13, 71, 161, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(20px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .theme-batman .nav {
+    display: none;
+  }
+  
+  .theme-batman .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .theme-batman .chat-container {
+    margin: 80px 20px;
+  }
+  
+  .theme-batman .performance-metrics {
+    width: 100%;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    border-radius: 10px 10px 0 0;
+    transform: translateY(100%);
+  }
+  
+  .theme-batman .performance-metrics.visible {
+    transform: translateY(0);
+  }
+  
+  .theme-batman .model-container {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Mobile Menu */
+.theme-batman .mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--bat-white);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.theme-batman .mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 80px 40px;
+  transition: right 0.5s ease;
+}
+
+.theme-batman .mobile-menu.active {
+  right: 0;
+}
+
+.theme-batman .mobile-menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--bat-white);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.theme-batman .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.theme-batman .mobile-nav-item {
+  color: var(--bat-silver);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.theme-batman .mobile-nav-item:hover {
+  color: var(--bat-yellow);
+}
+
+/* Noise Overlay */
+.theme-batman .noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4AcGEgUFvtN3BgAAACZJREFUaN7t1rENACAMBEEI7L+xW4X0AtIQEbnKN9s9cpcDAACwwQMQZgHGlvC+RAAAAABJRU5ErkJggg==');
+  opacity: 0.03;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Scroll Progress Indicator */
+.theme-batman .scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  z-index: 1001;
+  transition: width 0.1s ease;
+}
+
+/* Theme Switcher */
+.theme-batman .theme-switcher {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-batman .theme-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-batman .theme-option:hover {
+  background-color: rgba(45, 45, 45, 0.5);
+}
+
+.theme-batman .theme-option.active {
+  background-color: rgba(13, 71, 161, 0.2);
+}
+
+.theme-batman .theme-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.theme-batman .theme-batman-color {
+  background: linear-gradient(135deg, #0a0a0a 50%, #0066ff 50%);
+}
+
+.theme-batman .theme-moonlight-color {
+  background: linear-gradient(135deg, #ffffff 50%, #4f83cc 50%);
+}
+
+.theme-batman .theme-atom-color {
+  background: linear-gradient(135deg, #263238 50%, #00bcd4 50%);
+}
+
+.theme-batman .theme-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Batman-specific Utility Classes */
+.theme-batman .bat-button {
+  display: inline-block;
+  padding: 12px 25px;
+  background: var(--gradient-primary);
+  color: var(--bat-white);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow);
+  border: none;
+  cursor: pointer;
+}
+
+.theme-batman .bat-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(13, 71, 161, 0.5);
+}
+
+.theme-batman .text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.theme-batman .glow-text {
+  text-shadow: 0 0 10px rgba(33, 150, 243, 0.7);
+}
+
+.theme-batman .hidden {
+  display: none !important;
+}
+
+.theme-batman .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+
+
+.theme-batman .focus-visible {
+  outline: 2px solid var(--bat-light-blue);
+  outline-offset: 2px;
+}
+
+/* 
+ * MOONLIGHT THEME - MOON KNIGHT INTERFACE
+ * Advanced 3D dark interface with Moon Knight-inspired design elements
+ */
+
+:root.theme-moonlight {
+  /* Core Color Palette */
+  --primary: #4f83cc;
+  --primary-dark: #2c5282;
+  --primary-light: #90cdf4;
+  --secondary: #805ad5;
+  --accent: #e2e8f0;
+  --background: #1a202c;
+  --surface: #2d3748;
+  --surface-variant: #4a5568;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #a0aec0;
+  
+  /* Moonlight-Specific Colors */
+  --moon-white: #f7fafc;
+  --moon-silver: #cbd5e0;
+  --moon-blue: #4f83cc;
+  --moon-dark-blue: #2c5282;
+  --moon-midnight: #1a202c;
+  --moon-black: #171923;
+  --moon-purple: #805ad5;
+  --moon-gold: #d69e2e;
+  --moon-crescent: #e2e8f0;
+  --accent-teal: #38b2ac;
+  --accent-red: #e53e3e;
+  
+  /* Effects */
+  --border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 15px rgba(79, 131, 204, 0.7);
+  --gradient-primary: linear-gradient(135deg, var(--moon-blue) 0%, var(--moon-purple) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--accent-teal) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--moon-silver) 0%, var(--moon-white) 100%);
+  --logo-filter: drop-shadow(0 0 10px rgba(79, 131, 204, 0.7));
+  
+  /* Animation Speeds */
+  --speed-fast: 0.2s;
+  --speed-normal: 0.5s;
+  --speed-slow: 1s;
+  
+  /* Font Families */
+  --font-main: 'Montserrat', 'Segoe UI', sans-serif;
+  --font-display: 'Montserrat', 'Arial Black', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Theme-specific variables */
+  --theme-name: "Moonlight";
+  --theme-intro: "Embrace the chaos within.";
+  --theme-subtitle: "The voice in your head is now digital.";
+  --theme-accent-phrase: "I am Moonlight's vengeance.";
+  --theme-particle-color-1: 79, 131, 204;  /* RGB for JS use */
+  --theme-particle-color-2: 128, 90, 213;  /* RGB for JS use */
+  --theme-ambient-light: 26, 32, 44;       /* RGB for JS use */
+  --theme-directional-light: 79, 131, 204; /* RGB for JS use */
+  --theme-fog-color: 23, 25, 35;           /* RGB for JS use */
+  --theme-bloom-strength: 0.6;
+  --theme-bloom-radius: 0.5;
+  --theme-bloom-threshold: 0.8;
+}
+
+/* Base Reset - Applied to all themes */
+.theme-moonlight *, 
+.theme-moonlight *::before, 
+.theme-moonlight *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.theme-moonlight body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  perspective: 1000px;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Scrollbar */
+.theme-moonlight ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-moonlight ::-webkit-scrollbar-track {
+  background: var(--moon-midnight);
+}
+
+.theme-moonlight ::-webkit-scrollbar-thumb {
+  background: var(--moon-blue);
+  border-radius: 3px;
+}
+
+.theme-moonlight ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* 3D Canvas Container */
+.theme-moonlight .webgl-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Loading Screen */
+.theme-moonlight .loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--moon-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-moonlight .loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-moonlight .theme-logo {
+  width: 120px;
+  height: 60px;
+  margin-bottom: 40px;
+  filter: var(--logo-filter);
+  animation: pulse 2s infinite;
+}
+
+.theme-moonlight .loading-bar-container {
+  width: 300px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.theme-moonlight .loading-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.5s ease-out;
+}
+
+/* Intro Sequence */
+.theme-moonlight .intro-sequence {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--moon-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-moonlight .intro-sequence.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.theme-moonlight .intro-sequence.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-moonlight .intro-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  text-align: center;
+  margin: 20px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  max-width: 80%;
+}
+
+.theme-moonlight .intro-line.visible {
+  animation: fadeInUp 1s forwards;
+}
+
+.theme-moonlight .intro-line-1 {
+  color: var(--moon-silver);
+}
+
+.theme-moonlight .intro-line-2 {
+  color: var(--moon-white);
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+}
+
+.theme-moonlight .intro-line-3 {
+  color: var(--moon-crescent);
+  font-weight: bold;
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.theme-moonlight .intro-line-4 {
+  color: var(--moon-blue);
+}
+
+.theme-moonlight .intro-line-5 {
+  color: var(--moon-purple);
+  font-weight: bold;
+}
+
+/* Main Interface */
+.theme-moonlight .main-interface {
+  position: relative;
+  min-height: 100vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-out, visibility 1s ease-out;
+}
+
+.theme-moonlight .main-interface.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Header */
+.theme-moonlight .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: rgba(26, 32, 44, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.theme-moonlight .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-moonlight .logo-icon {
+  width: 40px;
+  height: 40px;
+  filter: var(--logo-filter);
+}
+
+.theme-moonlight .logo-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--moon-white);
+  letter-spacing: 1px;
+}
+
+.theme-moonlight .nav {
+  display: flex;
+  gap: 30px;
+}
+
+.theme-moonlight .nav-item {
+  color: var(--moon-silver);
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.theme-moonlight .nav-item:hover {
+  color: var(--moon-crescent);
+}
+
+.theme-moonlight .nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--moon-crescent);
+  transition: width 0.3s ease;
+}
+
+.theme-moonlight .nav-item:hover::after {
+  width: 100%;
+}
+
+/* Hero Section */
+.theme-moonlight .hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+.theme-moonlight .hero-content {
+  max-width: 800px;
+  text-align: center;
+  z-index: 2;
+}
+
+.theme-moonlight .hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  margin-bottom: 20px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  background: linear-gradient(to right, var(--moon-silver), var(--moon-white));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
+}
+
+.theme-moonlight .hero-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--moon-silver);
+  margin-bottom: 40px;
+}
+
+.theme-moonlight .hero-cta {
+  display: inline-block;
+  padding: 15px 40px;
+  background: var(--gradient-primary);
+  color: var(--moon-white);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow);
+}
+
+.theme-moonlight .hero-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
+}
+
+.theme-moonlight .hero-cta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(79, 131, 204, 0.5);
+}
+
+.theme-moonlight .hero-cta:hover::before {
+  left: 100%;
+}
+
+/* Chat Interface */
+.theme-moonlight .chat-container {
+  max-width: 1200px;
+  margin: 100px auto;
+  background: rgba(45, 55, 72, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(79, 131, 204, 0.3);
+  position: relative;
+}
+
+.theme-moonlight .chat-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+}
+
+.theme-moonlight .chat-header {
+  padding: 20px;
+  background: rgba(26, 32, 44, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-moonlight .chat-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-moonlight .chat-icon {
+  width: 30px;
+  height: 30px;
+  filter: var(--logo-filter);
+}
+
+.theme-moonlight .chat-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--moon-crescent);
+}
+
+.theme-moonlight .chat-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--moon-silver);
+  font-size: 0.9rem;
+}
+
+.theme-moonlight .status-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: var(--moon-blue);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.theme-moonlight .chat-messages {
+  height: 500px;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.theme-moonlight .message {
+  max-width: 80%;
+  padding: 15px 20px;
+  border-radius: 10px;
+  position: relative;
+  animation: fadeIn 0.5s forwards;
+}
+
+.theme-moonlight .message-user {
+  align-self: flex-end;
+  background: var(--surface-variant);
+  border-bottom-right-radius: 0;
+  color: var(--moon-white);
+}
+
+.theme-moonlight .message-ai {
+  align-self: flex-start;
+  background: var(--gradient-primary);
+  border-bottom-left-radius: 0;
+  color: var(--moon-white);
+  box-shadow: var(--glow);
+}
+
+.theme-moonlight .message-time {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 5px;
+  text-align: right;
+}
+
+.theme-moonlight .chat-input-container {
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(26, 32, 44, 0.9);
+}
+
+.theme-moonlight .chat-input {
+  flex: 1;
+  padding: 15px 20px;
+  background: rgba(74, 85, 104, 0.5);
+  border: 1px solid rgba(79, 131, 204, 0.3);
+  border-radius: 5px;
+  color: var(--moon-white);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-moonlight .chat-input:focus {
+  outline: none;
+  border-color: var(--moon-blue);
+  box-shadow: 0 0 0 2px rgba(79, 131, 204, 0.2);
+}
+
+.theme-moonlight .chat-send {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--moon-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--glow);
+}
+
+.theme-moonlight .chat-send:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(79, 131, 204, 0.7);
+}
+
+/* Voice Input Animation */
+.theme-moonlight .voice-animation {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 30px;
+}
+
+.theme-moonlight .voice-bar {
+  width: 3px;
+  height: 100%;
+  background-color: var(--moon-blue);
+  border-radius: 3px;
+  animation: voiceWave 0.5s infinite alternate;
+}
+
+.theme-moonlight .voice-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.theme-moonlight .voice-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.theme-moonlight .voice-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.theme-moonlight .voice-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+/* 3D Model Container */
+.theme-moonlight .model-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  height: 200px;
+  z-index: 10;
+}
+
+/* Performance Metrics */
+.theme-moonlight .performance-metrics {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: rgba(26, 32, 44, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(79, 131, 204, 0.3);
+  z-index: 100;
+  transform: translateX(300px);
+  transition: transform 0.5s ease;
+}
+
+.theme-moonlight .performance-metrics.visible {
+  transform: translateX(0);
+}
+
+.theme-moonlight .metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-moonlight .metrics-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--moon-crescent);
+}
+
+.theme-moonlight .metrics-close {
+  background: none;
+  border: none;
+  color: var(--moon-silver);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.theme-moonlight .metric-item {
+  margin-bottom: 10px;
+}
+
+.theme-moonlight .metric-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--moon-silver);
+  margin-bottom: 5px;
+}
+
+.theme-moonlight .metric-value {
+  float: right;
+  color: var(--moon-white);
+}
+
+.theme-moonlight .metric-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.theme-moonlight .metric-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Custom Cursor */
+.theme-moonlight .cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--moon-blue);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+.theme-moonlight .cursor-dot {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background-color: var(--moon-crescent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+}
+
+/* Theme-specific Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes voiceWave {
+  0% {
+    height: 10%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+  }
+  40% {
+    transform: translate(-5px, -5px);
+  }
+  60% {
+    transform: translate(5px, 5px);
+  }
+  80% {
+    transform: translate(5px, -5px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Moon Knight-specific Elements */
+.theme-moonlight .moon-symbol {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0.03;
+  z-index: -1;
+  width: 800px;
+  height: 400px;
+  background-image: url('/assets/images/moon-symbol.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+.theme-moonlight .moon-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79, 131, 204, 0.1) 0%, rgba(26, 32, 44, 0) 70%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(20px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .theme-moonlight .nav {
+    display: none;
+  }
+  
+  .theme-moonlight .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .theme-moonlight .chat-container {
+    margin: 80px 20px;
+  }
+  
+  .theme-moonlight .performance-metrics {
+    width: 100%;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    border-radius: 10px 10px 0 0;
+    transform: translateY(100%);
+  }
+  
+  .theme-moonlight .performance-metrics.visible {
+    transform: translateY(0);
+  }
+  
+  .theme-moonlight .model-container {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Mobile Menu */
+.theme-moonlight .mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--moon-white);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.theme-moonlight .mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  height: 100vh;
+  background: rgba(26, 32, 44, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 80px 40px;
+  transition: right 0.5s ease;
+}
+
+.theme-moonlight .mobile-menu.active {
+  right: 0;
+}
+
+.theme-moonlight .mobile-menu-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--moon-white);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.theme-moonlight .mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.theme-moonlight .mobile-nav-item {
+  color: var(--moon-silver);
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.theme-moonlight .mobile-nav-item:hover {
+  color: var(--moon-crescent);
+}
+
+/* Noise Overlay */
+.theme-moonlight .noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4AcGEgUFvtN3BgAAACZJREFUaN7t1rENACAMBEEI7L+xW4X0AtIQEbnKN9s9cpcDAACwwQMQZgHGlvC+RAAAAABJRU5ErkJggg==');
+  opacity: 0.03;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Scroll Progress Indicator */
+.theme-moonlight .scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  z-index: 1001;
+  transition: width 0.1s ease;
+}
+
+/* Theme Switcher */
+.theme-moonlight .theme-switcher {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  background: rgba(26, 32, 44, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(79, 131, 204, 0.3);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.theme-moonlight .theme-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-moonlight .theme-option:hover {
+  background-color: rgba(74, 85, 104, 0.5);
+}
+
+.theme-moonlight .theme-option.active {
+  background-color: rgba(79, 131, 204, 0.2);
+}
+
+.theme-moonlight .theme-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.theme-moonlight .theme-batman-color {
+  background: linear-gradient(135deg, #0a0a0a 50%, #0066ff 50%);
+}
+
+.theme-moonlight .theme-moonlight-color {
+  background: linear-gradient(135deg, #ffffff 50%, #4f83cc 50%);
+}
+
+.theme-moonlight .theme-atom-color {
+  background: linear-gradient(135deg, #263238 50%, #00bcd4 50%);
+}
+
+.theme-moonlight .theme-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Moonlight-specific Utility Classes */
+.theme-moonlight .moon-button {
+  display: inline-block;
+  padding: 12px 25px;
+  background: var(--gradient-primary);
+  color: var(--moon-white);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow);
+  border: none;
+  cursor: pointer;
+}
+
+.theme-moonlight .moon-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(79, 131, 204, 0.5);
+}
+
+.theme-moonlight .text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.theme-moonlight .glow-text {
+  text-shadow: 0 0 10px rgba(79, 131, 204, 0.7);
+}
+
+/* Moon Knight Identity Shift Effect */
+.theme-moonlight .identity-shift {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-moonlight .identity-shift::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(226, 232, 240, 0.2), transparent);
+  transform: translateX(-100%);
+  animation: identityShift 8s infinite;
+}
+
+@keyframes identityShift {
+  0% {
+    transform: translateX(-100%);
+  }
+  20% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Moon Phases Animation */
+.theme-moonlight .moon-phase {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--moon-white);
+  box-shadow: 0 0 20px rgba(226, 232, 240, 0.5);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.theme-moonlight .moon-phase::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--moon-black);
+  border-radius: 50%;
+  animation: moonPhase 10s infinite linear;
+}
+
+@keyframes moonPhase {
+  0% {
+    transform: translateX(40px);
+  }
+  50% {
+    transform: translateX(-40px);
+  }
+  100% {
+    transform: translateX(40px);
+  }
+}
+
+/* Dissociative Identity Effect */
+.theme-moonlight .split-personality {
+  position: relative;
+  transition: all 0.5s ease;
+}
+
+.theme-moonlight .split-personality:hover {
+  text-shadow: 
+    -3px 0 5px rgba(79, 131, 204, 0.7),
+    3px 0 5px rgba(128, 90, 213, 0.7);
+  letter-spacing: 2px;
+}
+
+.theme-moonlight .hidden {
+  display: none !important;
+}
+
+.theme-moonlight .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 3D Elements */
+.theme-moonlight .floating-element {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.theme-moonlight .floating-element:hover {
+  transform: translateZ(20px) rotateX(5deg) rotateY(5deg);
+}
+
+/* Moon Knight Suit Transition */
+.theme-moonlight .suit-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-moonlight .suit-transition::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.1), rgba(79, 131, 204, 0.1));
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.theme-moonlight .suit-transition:hover::after {
+  opacity: 1;
+}
